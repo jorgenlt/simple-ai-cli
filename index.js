@@ -38,9 +38,9 @@ const handleUserPrompt = async (userPrompt) => {
 
   // Set up options for the API call
   const options = {
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o-mini",
     messages: requestMessages,
-    max_tokens: 1000,
+    max_tokens: 3000,
   };
 
   console.log("");
