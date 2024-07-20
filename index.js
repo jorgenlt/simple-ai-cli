@@ -13,6 +13,9 @@ const appDir = path.dirname(fileURLToPath(new URL(import.meta.url)));
 config({ path: `${appDir}/.env` });
 const apiKey = process.env.API_KEY;
 
+// Set OpenAI model
+const openAImodel = "gpt-4o-mini";
+
 // Create a new userInterface instance
 const userInterface = createInterface({
   input: process.stdin,
@@ -20,6 +23,11 @@ const userInterface = createInterface({
   terminal: false,
 });
 
+// Welcome message
+console.log("Welcome to Simple AI CLI.");
+console.log(`Current model: ${openAImodel}`);
+
+// Show the prompt
 userInterface.prompt();
 
 let chatHistory = [];
@@ -38,7 +46,7 @@ const handleUserPrompt = async (userPrompt) => {
 
   // Set up options for the API call
   const options = {
-    model: "gpt-4o-mini",
+    model: openAImodel,
     messages: requestMessages,
     max_tokens: 3000,
   };

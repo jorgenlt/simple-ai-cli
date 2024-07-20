@@ -1,12 +1,11 @@
 import axios from "axios";
 
 const api = async (options, key) => {
+  if (!options || !key) {
+    throw new Error("Invalid input parameters");
+  }
+
   try {
-
-    if (!options || !key) {
-      throw new Error("Invalid input parameters");
-    }
-
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       options,
