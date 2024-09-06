@@ -2,7 +2,7 @@ import { createInterface } from "readline";
 import { config } from "dotenv";
 import loadingAnimation from "./utils/loadingAnimation.js";
 import api from "./api/api.js";
-import writeMessage from "./utils/writeMessage.js";
+import writeMessageMd from './utils/writeMessageMd.js'
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -71,7 +71,7 @@ const handleUserPrompt = async (userPrompt) => {
     const message = responseMessage.content;
 
     // Display the response message
-    writeMessage(message, userInterface);
+    writeMessageMd(message, userInterface);
 
     // Update the chat history with the response
     const newMessages = [
