@@ -6,4 +6,6 @@
 
 <br/>
 
-![simple-ai-cli](https://github.com/user-attachments/assets/877a2634-36b2-4fc3-a84b-19921774937d)
+## Screenshot
+
+![simple-ai-cli-md](https://github.com/user-attachments/assets/94fe8d85-317c-4ef4-90d3-8cbbe5b749cc)
