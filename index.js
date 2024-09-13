@@ -1,10 +1,13 @@
 import { createInterface } from "readline";
 import { config } from "dotenv";
-import loadingAnimation from "./utils/loadingAnimation.js";
 import api from "./api/api.js";
-import writeMessageMd from './utils/writeMessageMd.js'
+import changeModel from "./utils/changeModel.js";
+import loadingAnimation from "./utils/loadingAnimation.js";
+import writeMessageMd from "./utils/writeMessageMd.js";
+import welcomeMessage from "./utils/welcomeMessage.js";
 import { fileURLToPath } from "url";
 import path from "path";
+import chalk from "chalk";
 
 // Load the environment variables from .env
 // Get the directory name of the current module to be able to
@@ -13,8 +16,11 @@ const appDir = path.dirname(fileURLToPath(new URL(import.meta.url)));
 config({ path: `${appDir}/.env` });
 const apiKey = process.env.API_KEY;
 
-// Set OpenAI model
-const openAImodel = "gpt-4o-mini";
+// List of available models
+const models = ["gpt-4o-mini", "gpt-4o"];
+
+// Set default OpenAI model
+let openAiModel = "gpt-4o-mini";
 
 // Create a new userInterface instance
 const userInterface = createInterface({
@@ -24,8 +30,7 @@ const userInterface = createInterface({
 });
 
 // Welcome message
-console.log("Welcome to Simple AI CLI.");
-console.log(`Current model: ${openAImodel}`);
+welcomeMessage(openAiModel);
 
 // Show the prompt
 userInterface.prompt();
@@ -35,6 +40,19 @@ let inputBuffer = [];
 let debounceTimeout;
 
 const handleUserPrompt = async (userPrompt) => {
+  if (userPrompt.trim() === "quit" || userPrompt.trim() === "exit") {
+    // Exit the app
+    process.exit(0);
+  }
+
+  if (userPrompt.trim() === "models") {
+    // Handle the model change request
+    openAiModel = await changeModel(userInterface, models);
+    console.log(`\nModel changed to: ${chalk.yellow(openAiModel)}\n`);
+    userInterface.prompt(); // Continue prompting after changing the model
+    return;
+  }
+
   // Add the user's input to the chat history
   const requestMessages = [
     ...chatHistory,
@@ -46,7 +64,7 @@ const handleUserPrompt = async (userPrompt) => {
 
   // Set up options for the API call
   const options = {
-    model: openAImodel,
+    model: openAiModel,
     messages: requestMessages,
     max_tokens: 3000,
   };
