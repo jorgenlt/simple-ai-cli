@@ -10,4 +10,4 @@
 
 ## Screenshot
 
-![simple-ai-cli-md](https://github.com/user-attachments/assets/94fe8d85-317c-4ef4-90d3-8cbbe5b749cc)
+![simple-ai-cli](https://github.com/user-attachments/assets/d5eaa7cc-e644-4f28-8355-70a61cc1f137)
