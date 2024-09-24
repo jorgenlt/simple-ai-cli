@@ -5,6 +5,7 @@ import changeModel from "./utils/changeModel.js";
 import loadingAnimation from "./utils/loadingAnimation.js";
 import writeMessageMd from "./utils/writeMessageMd.js";
 import welcomeMessage from "./utils/welcomeMessage.js";
+import displayHelp from "./utils/displayHelp.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import chalk from "chalk";
@@ -40,9 +41,18 @@ let inputBuffer = [];
 let debounceTimeout;
 
 const handleUserPrompt = async (userPrompt) => {
-  if (userPrompt.trim() === "quit" || userPrompt.trim() === "exit") {
+  if (
+    userPrompt.trim() === "quit" ||
+    userPrompt.trim() === "exit" ||
+    userPrompt.trim() === "q"
+  ) {
     // Exit the app
     process.exit(0);
+  }
+
+  if (userPrompt.trim() === "help") {
+    displayHelp();
+    return;
   }
 
   if (userPrompt.trim() === "models") {
