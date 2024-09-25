@@ -1,16 +1,16 @@
-import { createInterface } from "readline";
 import { config } from "dotenv";
+import { fileURLToPath } from "url";
+import { createInterface } from "readline";
 import api from "./api/api.js";
 import changeModel from "./utils/changeModel.js";
 import loadingAnimation from "./utils/loadingAnimation.js";
 import writeMessageMd from "./utils/writeMessageMd.js";
 import welcomeMessage from "./utils/welcomeMessage.js";
 import displayHelp from "./utils/displayHelp.js";
-import { fileURLToPath } from "url";
+import copyMessage from "./utils/copyMessage.js";
+import copyConversation from "./utils/copyConversation.js";
 import path from "path";
 import chalk from "chalk";
-import clipboardy from "clipboardy";
-import capitalize from './utils/capitalize.js'
 
 // Load the environment variables from .env
 // Get the directory name of the current module to be able to
@@ -77,28 +77,13 @@ const handleUserPrompt = async (userPrompt) => {
 
   // Copy message to clipboard
   if (userPrompt.trim() === "copy") {
-    if (chatHistory.length > 0) {
-      const lastMessage = chatHistory[chatHistory.length - 1].content;
-      clipboardy.writeSync(lastMessage);
-      console.log(chalk.green("\nLast message copied to clipboard.\n"));
-      return;
-    } else {
-      console.log(chalk.red("\nNo message to copy.\n"));
-    }
+    copyMessage(chatHistory);
     return;
   }
 
   // Copy conversation to clipboard
   if (userPrompt.trim() === "copy-all") {
-    if (chatHistory.length > 0) {
-      const fullConversation = chatHistory
-        .map((msg) => `**${capitalize(msg.role)}:** ${msg.content}`)
-        .join("\n\n");
-      clipboardy.writeSync(fullConversation);
-      console.log(chalk.green("\nEntire conversation copied to clipboard.\n"));
-    } else {
-      console.log(chalk.red("\nNo conversation to copy.\n"));
-    }
+    copyConversation(chatHistory);
     return;
   }
 
@@ -152,7 +137,8 @@ const handleUserPrompt = async (userPrompt) => {
   }
 };
 
-// Debounce function to handle input with a delay. Makes it possible to paste text without executing at every new line.
+// Function to handle input with a delay.
+// Makes it possible to paste text without executing at every new line.
 const bufferUserInput = (line) => {
   clearTimeout(bufferTimeout);
 
@@ -176,7 +162,9 @@ userInterface.on("line", (line) => {
 });
 
 // If arguments exists, run prompt
+// Makes it possible to start app with the prompt as an argument
+// E.g. node index.js "this is the prompt to run"
 if (args.length > 0) {
-  console.log(args.join(" "))
+  console.log(args.join(" "));
   bufferUserInput(args.join(" "));
 }
