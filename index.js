@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 import chalk from "chalk";
 import clipboardy from "clipboardy";
+import capitalize from './utils/capitalize.js'
 
 // Load the environment variables from .env
 // Get the directory name of the current module to be able to
@@ -91,7 +92,7 @@ const handleUserPrompt = async (userPrompt) => {
   if (userPrompt.trim() === "copy-all") {
     if (chatHistory.length > 0) {
       const fullConversation = chatHistory
-        .map((msg) => `${msg.role}: ${msg.content}`)
+        .map((msg) => `**${capitalize(msg.role)}:** ${msg.content}`)
         .join("\n\n");
       clipboardy.writeSync(fullConversation);
       console.log(chalk.green("\nEntire conversation copied to clipboard.\n"));
