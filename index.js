@@ -24,6 +24,9 @@ const models = ["gpt-4o-mini", "gpt-4o"];
 // Set default OpenAI model
 let openAiModel = "gpt-4o-mini";
 
+// Get arguments
+const args = process.argv.slice(2);
+
 // Create a new userInterface instance
 const userInterface = createInterface({
   input: process.stdin,
@@ -39,7 +42,7 @@ userInterface.prompt();
 
 let chatHistory = [];
 let inputBuffer = [];
-let debounceTimeout;
+let bufferTimeout;
 
 const handleUserPrompt = async (userPrompt) => {
   if (
@@ -49,6 +52,11 @@ const handleUserPrompt = async (userPrompt) => {
   ) {
     // Exit the app
     process.exit(0);
+  }
+
+  if (userPrompt.trim() === "") {
+    console.log(chalk.red("\nWrite something!\n"));
+    return;
   }
 
   // Display help
@@ -109,8 +117,6 @@ const handleUserPrompt = async (userPrompt) => {
     max_tokens: 3000,
   };
 
-  console.log("");
-
   // Start the loading animation while waiting for the API response
   const loadingInterval = loadingAnimation();
 
@@ -145,13 +151,13 @@ const handleUserPrompt = async (userPrompt) => {
   }
 };
 
-// Debounce function to handle input with a delay
-const debounceInput = (line) => {
-  clearTimeout(debounceTimeout);
+// Debounce function to handle input with a delay. Makes it possible to paste text without executing at every new line.
+const bufferUserInput = (line) => {
+  clearTimeout(bufferTimeout);
 
   inputBuffer.push(line);
 
-  debounceTimeout = setTimeout(() => {
+  bufferTimeout = setTimeout(() => {
     let userPrompt = inputBuffer.join("\n");
     inputBuffer = []; // Clear the buffer
 
@@ -165,5 +171,11 @@ const debounceInput = (line) => {
 
 // Listen to the user's input
 userInterface.on("line", (line) => {
-  debounceInput(line);
+  bufferUserInput(line);
 });
+
+// If arguments exists, run prompt
+if (args.length > 0) {
+  console.log(args.join(" "))
+  bufferUserInput(args.join(" "));
+}
