@@ -20,10 +20,10 @@ config({ path: `${appDir}/.env` });
 const apiKey = process.env.API_KEY;
 
 // List of available models
-const models = ["gpt-4o-mini", "gpt-4o"];
+const models = ["gpt-5", "gpt-5-mini", "gpt-5-nano"];
 
 // Set default OpenAI model
-let openAiModel = "gpt-4o-mini";
+let openAiModel = "gpt-5-nano";
 
 // Get arguments
 const args = process.argv.slice(2);
