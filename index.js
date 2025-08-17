@@ -100,7 +100,7 @@ const handleUserPrompt = async (userPrompt) => {
   const options = {
     model: openAiModel,
     messages: requestMessages,
-    max_tokens: 3000,
+    max_completion_tokens: 3000,
   };
 
   // Start the loading animation while waiting for the API response
