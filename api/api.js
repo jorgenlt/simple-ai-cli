@@ -1,4 +1,4 @@
-import axios from "axios";
+import OpenAI from "openai";
 
 const api = async (options, key) => {
   if (!options || !key) {
@@ -6,17 +6,16 @@ const api = async (options, key) => {
   }
 
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      options,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${key}`,
-        },
-      }
-    );
-    return response.data;
+    const client = new OpenAI({ apiKey: key });
+
+    const response = await client.chat.completions.create({
+      model: options.model,
+      messages: options.messages,
+      max_tokens: options.max_tokens,
+      temperature: options.temperature,
+    });
+
+    return response;
   } catch (error) {
     console.error("API request failed:", error);
     throw error;
